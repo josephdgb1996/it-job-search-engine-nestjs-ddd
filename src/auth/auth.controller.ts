@@ -29,9 +29,6 @@ export class AuthController extends BaseController {
 
         switch (error.constructor) {
           case CreateUserErrors.UsernameTakenError:
-            this.logger.error(error.errorValue().message);
-            return this.conflict(res, error.errorValue().message);
-
           case CreateUserErrors.EmailAlreadyExistsError:
             this.logger.error(error.errorValue().message);
             return this.conflict(res, error.errorValue().message);
@@ -40,10 +37,10 @@ export class AuthController extends BaseController {
             this.logger.error(error.errorValue());
             return this.fail(res, error.errorValue());
         }
-      } else {
-        this.logger.verbose(`User successfully created`);
-        return this.ok(res);
       }
+
+      this.logger.verbose(`User successfully created`);
+      return this.ok(res);
     } catch (err) {
       return this.fail(res, err);
     }

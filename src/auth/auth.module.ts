@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthController } from './auth.controller';
-
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
-import { CreateUserUseCase } from './useCases/createUser/CreateUserUseCase';
+import { CreateUserUseCase } from './useCases/createUser';
 
 @Module({
   imports: [
@@ -19,7 +18,7 @@ import { CreateUserUseCase } from './useCases/createUser/CreateUserUseCase';
         expiresIn: 3600,
       },
     }),
-    TypeOrmModule.forFeature([UserRepository])
+    TypeOrmModule.forFeature([UserRepository]),
   ],
   controllers: [AuthController],
   providers: [CreateUserUseCase],

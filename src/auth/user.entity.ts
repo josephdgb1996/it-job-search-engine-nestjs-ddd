@@ -1,8 +1,17 @@
-import { Column, Entity, PrimaryColumn, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryColumn,
+  Unique,
+} from 'typeorm';
 
-import { AbstractEntity } from '../shared/core';
+import { AbstractEntity } from 'shared/core';
 
-@Entity("user")
+import { EmployerEntity } from '../employer/employer.entity';
+
+@Entity('user')
 @Unique(['email', 'username'])
 export class UserEntity extends AbstractEntity {
   @PrimaryColumn()
@@ -23,10 +32,10 @@ export class UserEntity extends AbstractEntity {
   @Column({ default: false })
   isDeleted: boolean;
 
-  // @OneToOne(
-  //   () => Employer,
-  //   (employer: Employer) => employer.user
-  // )
-  // @JoinColumn()
-  // employer!: Employer;
+  @OneToOne(
+    () => EmployerEntity,
+    (employer: EmployerEntity) => employer.user,
+  )
+  @JoinColumn()
+  employer: EmployerEntity;
 }
