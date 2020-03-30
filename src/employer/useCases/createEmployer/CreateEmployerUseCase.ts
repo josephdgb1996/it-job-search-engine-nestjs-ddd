@@ -15,8 +15,7 @@ import { Employer, CompanyName, CompanyDescription } from '../../domain';
 type Response = Either<
   | CreateEmployerErrors.EmployerAlreadyExistsError
   | CreateEmployerErrors.UserDoesntExistError
-  | AppError.UnexpectedError
-  | Result<any>,
+  | AppError.UnexpectedError,
   Result<void>
 >;
 
@@ -29,8 +28,7 @@ export class CreateEmployerUseCase
     private userRepository: UserRepository,
   ) {}
 
-  public async execute(request: CreateEmployerDTO, id: string): Promise<Response> {
-    // todo: user should comes from auth middleware
+  async execute(request: CreateEmployerDTO, id: string): Promise<Response> {
     let user: User;
     let employer: Employer;
 

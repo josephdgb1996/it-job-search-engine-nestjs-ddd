@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Logger,
   Post,
   Req,
@@ -17,13 +18,17 @@ import {
   CreateEmployerErrors,
   CreateEmployerUseCase,
 } from './useCases/createEmployer';
+import { GetEmployerErrors, GetEmployerUseCase } from './useCases/getEmployer';
 
 @Controller('employer')
 @UseGuards(AuthGuard())
 export class EmployerController extends BaseController {
   private logger = new Logger('EmployerController');
 
-  constructor(private createEmployerUseCase: CreateEmployerUseCase) {
+  constructor(
+    private createEmployerUseCase: CreateEmployerUseCase,
+    private getEmployerUseCase: GetEmployerUseCase,
+  ) {
     super();
   }
 
@@ -50,12 +55,39 @@ export class EmployerController extends BaseController {
 
           default:
             this.logger.error(error.errorValue());
-            return this.fail(res, error.errorValue());
+            return this.fail(res, error.errorValue() as any);
         }
       }
 
       this.logger.verbose(`Employer successfully created`);
       return this.ok(res);
+    } catch (err) {
+      return this.fail(res, err);
+    }
+  }
+
+  @Get()
+  async getEmployer(@Res() res: Response, @Req() req): Promise<any> {
+    try {
+      const result = await this.getEmployerUseCase.execute(req.user);
+
+      if (result.isLeft()) {
+        const error = result.value;
+
+        switch (error.constructor) {
+          case GetEmployerErrors.UserNotFoundError:
+          case GetEmployerErrors.EmployerNotFoundError:
+            this.logger.error(error.errorValue().message);
+            return this.notFound(res, error.errorValue().message);
+
+          default:
+            this.logger.error(error.errorValue());
+            return this.fail(res, error.errorValue() as any);
+        }
+      }
+
+      this.logger.verbose(`Employer data successfully returned`);
+      return this.ok(res, result.value.getValue());
     } catch (err) {
       return this.fail(res, err);
     }

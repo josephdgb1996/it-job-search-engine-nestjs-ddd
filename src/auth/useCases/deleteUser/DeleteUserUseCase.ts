@@ -19,7 +19,7 @@ export class DeleteUserUseCase
     private userRepository: UserRepository,
   ) {}
 
-  async execute(request: DeleteUserDTO): Promise<any> {
+  async execute(request: DeleteUserDTO): Promise<Response> {
     let user: User;
 
     try {
