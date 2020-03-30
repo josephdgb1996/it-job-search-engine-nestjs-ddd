@@ -1,4 +1,13 @@
-import { Body, Controller, Logger, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Logger,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 
 import { BaseController } from 'shared/core';
@@ -10,6 +19,7 @@ import {
 } from './useCases/createEmployer';
 
 @Controller('employer')
+@UseGuards(AuthGuard())
 export class EmployerController extends BaseController {
   private logger = new Logger('EmployerController');
 
@@ -21,10 +31,12 @@ export class EmployerController extends BaseController {
   async createEmployer(
     @Body() createEmployerDto: CreateEmployerDTO,
     @Res() res: Response,
+    @Req() req,
   ): Promise<any> {
     try {
       const result = await this.createEmployerUseCase.execute(
         createEmployerDto,
+        req.user.userId,
       );
 
       if (result.isLeft()) {

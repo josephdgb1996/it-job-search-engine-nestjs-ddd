@@ -5,7 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthController } from './auth.controller';
 import { UserRepository } from './user.repository';
+import { JwtStrategy } from './jwt.strategy';
+
 import { CreateUserUseCase } from './useCases/createUser';
+import { LoginUserUseCase } from './useCases/loginUser';
 
 @Module({
   imports: [
@@ -13,7 +16,7 @@ import { CreateUserUseCase } from './useCases/createUser';
       defaultStrategy: 'jwt',
     }),
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
+      secret: process.env.SECRET,
       signOptions: {
         expiresIn: 3600,
       },
@@ -21,6 +24,7 @@ import { CreateUserUseCase } from './useCases/createUser';
     TypeOrmModule.forFeature([UserRepository]),
   ],
   controllers: [AuthController],
-  providers: [CreateUserUseCase],
+  providers: [CreateUserUseCase, LoginUserUseCase, JwtStrategy],
+  exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}

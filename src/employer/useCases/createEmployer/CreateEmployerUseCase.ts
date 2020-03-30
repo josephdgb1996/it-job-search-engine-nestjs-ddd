@@ -29,12 +29,12 @@ export class CreateEmployerUseCase
     private userRepository: UserRepository,
   ) {}
 
-  public async execute(request: CreateEmployerDTO): Promise<Response> {
+  public async execute(request: CreateEmployerDTO, id: string): Promise<Response> {
     // todo: user should comes from auth middleware
     let user: User;
     let employer: Employer;
 
-    const userIdOrError = UserId.create(new UniqueEntityID(request.userId));
+    const userIdOrError = UserId.create(new UniqueEntityID(id));
     const companyNameOrError = CompanyName.create({
       value: request.companyName,
     });

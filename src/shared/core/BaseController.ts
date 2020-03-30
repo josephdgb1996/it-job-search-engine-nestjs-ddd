@@ -82,10 +82,7 @@ export abstract class BaseController {
     }
   }
 
-  public fail(res: express.Response, error: Error | string) {
-    // console.log(error);
-    return res.status(500).json({
-      message: error.toString(),
-    });
+  public fail(res: express.Response, error: Error) {
+    return res.status(500).json(error);
   }
 }

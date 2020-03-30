@@ -12,8 +12,7 @@ import { CreateUserDTO } from './CreateUserDTO';
 type Response = Either<
   | CreateUserErrors.EmailAlreadyExistsError
   | CreateUserErrors.UsernameTakenError
-  | AppError.UnexpectedError
-  | Result<any>,
+  | AppError.UnexpectedError,
   Result<void>
 >;
 
