@@ -20,7 +20,7 @@ type Response = Either<
 export class CreateUserUseCase
   implements UseCase<CreateUserDTO, Promise<Response>> {
   constructor(
-    @InjectRepository(UserRepository) // imports in auth.module.ts
+    @InjectRepository(UserRepository)
     private userRepository: UserRepository,
   ) {}
 

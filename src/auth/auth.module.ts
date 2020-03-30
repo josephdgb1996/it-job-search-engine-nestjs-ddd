@@ -9,6 +9,7 @@ import { JwtStrategy } from './jwt.strategy';
 
 import { CreateUserUseCase } from './useCases/createUser';
 import { LoginUserUseCase } from './useCases/loginUser';
+import { DeleteUserUseCase } from './useCases/deleteUser';
 
 @Module({
   imports: [
@@ -24,7 +25,12 @@ import { LoginUserUseCase } from './useCases/loginUser';
     TypeOrmModule.forFeature([UserRepository]),
   ],
   controllers: [AuthController],
-  providers: [CreateUserUseCase, LoginUserUseCase, JwtStrategy],
+  providers: [
+    CreateUserUseCase,
+    LoginUserUseCase,
+    DeleteUserUseCase,
+    JwtStrategy,
+  ],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}
